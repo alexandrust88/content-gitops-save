@@ -1,0 +1,24 @@
+name: Python applicationss
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ./python/requirements.txt
+    - name: Build & Push Image
+      run: |
+        cd ./python
+        docker login --username=alexandrust88 --password=${{ secrets.DOCKERPWD }}
+        docker image build -t alexandrust88/gitops_test:hellov2.0.0 .
+        docker push alexandrust88/gitops_test:hellov2.0.0
